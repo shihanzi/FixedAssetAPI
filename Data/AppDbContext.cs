@@ -15,6 +15,7 @@ namespace FixedAssetAPI.Data
         public DbSet<Transfer> Transfers { get; set; }
         public DbSet<Disposal> Disposals { get; set; }
         public DbSet<Valuation> Valuations { get; set; }
+        public DbSet<DepreciationRate> DepreciationRates { get; set; }
 
     }
 }

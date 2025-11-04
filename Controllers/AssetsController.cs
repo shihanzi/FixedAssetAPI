@@ -29,6 +29,24 @@ namespace FixedAssetAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Asset>> CreateAsset(Asset asset)
         {
+            // Calculate depreciation (straight-line)
+            var rate = await _context.DepreciationRates
+                .FirstOrDefaultAsync(r => r.CategoryId == asset.CategoryId);
+
+            if (rate != null)
+            {
+                var years = DateTime.Now.Year - asset.AcquisitionDate.Year;
+                if (years < 0) years = 0;
+                var depreciation = (double)asset.AcquisitionCost * (rate.Rate / 100) * years;
+                asset.BookValue = asset.AcquisitionCost - (decimal)depreciation;
+                if (asset.BookValue < 0) asset.BookValue = 0;
+            }
+            else
+            {
+                // If no depreciation rate set
+                asset.BookValue = asset.AcquisitionCost;
+            }
+
             _context.Assets.Add(asset);
             await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetAssets), new { id = asset.AssetId }, asset);
