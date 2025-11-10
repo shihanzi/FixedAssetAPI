@@ -6,7 +6,7 @@ namespace FixedAssetAPI.Models
     public class Custodian
     {
         [Key]
-        public int CustodionId { get; set; }
+        public int CustodianId { get; set; }
         [Required]
         public string Name { get; set; } = string.Empty;
         public string Designation { get; set; }

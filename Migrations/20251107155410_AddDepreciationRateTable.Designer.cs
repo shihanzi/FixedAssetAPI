@@ -3,6 +3,7 @@ using System;
 using FixedAssetAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FixedAssetAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251107155410_AddDepreciationRateTable")]
+    partial class AddDepreciationRateTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,7 +44,7 @@ namespace FixedAssetAPI.Migrations
                         .HasColumnType("text");
 
                     b.Property<decimal>("BookValue")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("numeric");
 
                     b.Property<int>("CategoryId")
                         .HasColumnType("integer");
@@ -50,13 +53,7 @@ namespace FixedAssetAPI.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<decimal>("CurrentDepreciatedValue")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<int>("CustodianId")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("DepartmentId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Description")
@@ -71,7 +68,7 @@ namespace FixedAssetAPI.Migrations
                         .HasColumnType("integer");
 
                     b.Property<decimal?>("MarketValue")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("numeric");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -82,8 +79,6 @@ namespace FixedAssetAPI.Migrations
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("CustodianId");
-
-                    b.HasIndex("DepartmentId");
 
                     b.HasIndex("LocationId");
 
@@ -109,11 +104,11 @@ namespace FixedAssetAPI.Migrations
 
             modelBuilder.Entity("FixedAssetAPI.Models.Custodian", b =>
                 {
-                    b.Property<int>("CustodianId")
+                    b.Property<int>("CustodionId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("CustodianId"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("CustodionId"));
 
                     b.Property<int>("DepartmentId")
                         .HasColumnType("integer");
@@ -126,11 +121,11 @@ namespace FixedAssetAPI.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("CustodianId");
+                    b.HasKey("CustodionId");
 
                     b.HasIndex("DepartmentId");
 
-                    b.ToTable("Custodians");
+                    b.ToTable("Custodions");
                 });
 
             modelBuilder.Entity("FixedAssetAPI.Models.Department", b =>
@@ -316,10 +311,6 @@ namespace FixedAssetAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("FixedAssetAPI.Models.Department", "Department")
-                        .WithMany()
-                        .HasForeignKey("DepartmentId");
-
                     b.HasOne("FixedAssetAPI.Models.Location", "Location")
                         .WithMany()
                         .HasForeignKey("LocationId")
@@ -329,8 +320,6 @@ namespace FixedAssetAPI.Migrations
                     b.Navigation("Category");
 
                     b.Navigation("Custodian");
-
-                    b.Navigation("Department");
 
                     b.Navigation("Location");
                 });

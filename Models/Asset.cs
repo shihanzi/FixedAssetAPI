@@ -28,13 +28,21 @@ namespace FixedAssetAPI.Models
 
         public Custodian? Custodian { get; set; }
 
+        public int? DepartmentId { get; set; }
+        public Department Department { get; set; }
+
         public DateTime AcquisitionDate { get; set; }
 
         public decimal AcquisitionCost { get; set; }
 
+        [Column(TypeName = "decimal(18,2)")]
         public decimal BookValue { get; set; }
 
+        [Column(TypeName = "decimal(18,2)")]
         public decimal? MarketValue { get; set; }
+
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal CurrentDepreciatedValue { get; set; }
 
         public string Condition { get; set; } = "Good";
 
